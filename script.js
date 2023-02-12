@@ -15,21 +15,32 @@ function division(a, b) {
 }
 
 function operate() {
-
+    // TODO: Implement operate function 
 }
 
 function clear() {
     display.textContent = '';
 }
 
-function updateDisplay(e) {
+function updateDisplayNumber(e) {
     display.textContent += e.textContent;
+}
+
+function updateDisplayOperator(e) {
+    if (display.textContent.length != 0) {
+        display.textContent += ' ' + e.textContent + ' ';
+    } else {
+        display.textContent += e.textContent + ' ';
+    }
 }
 
 let display = document.querySelector(".display");
 
-operatorButtons = document.querySelectorAll(".btn");
-operatorButtons.forEach(btn => btn.addEventListener('click', () => updateDisplay(btn)));
+numberButtons = document.querySelectorAll(".nbtn");
+numberButtons.forEach(btn => btn.addEventListener('click', () => updateDisplayNumber(btn)));
+
+operatorButtons = document.querySelectorAll('.obtn');
+operatorButtons.forEach(btn => btn.addEventListener('click', () => updateDisplayOperator(btn)));
 
 clearButton = document.querySelector(".cbtn1");
 clearButton.addEventListener('click', clear);
