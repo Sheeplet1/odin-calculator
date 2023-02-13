@@ -15,8 +15,20 @@ function division(a, b) {
     return parseInt(a) / parseInt(b);
 }
 
+function setOperation(operator) {
+    // TODO
+    if (currOperation !== null) evaluate();
+    
+    // when user enters an operator:
+    //  on the second part of display, have the current operation 
+    //  and clear main screen
+    firstOperand = mainDisplay.textContent;
+    currOperation = operator;
+    secondDisplay.textContent = `${firstOperand} ${currOperation}`
+    mainDisplay.textContent = '';
+}
+
 function operate(operator, a, b) {
-    // TODO: Implement operate function 
     a = Number(a);
     b = Number(b);
     switch (operator) {
@@ -32,48 +44,56 @@ function operate(operator, a, b) {
 
 function evaluate() {
     // TODO: Implement evaluate function => will use the operate function
+    if (currOperation == null) return;
+    if (currOperation === '/' && mainDisplay.textContent === '0') {
+        alert("Cannot divide by 0");
+        return;
+    }
+    secondOperand = mainDisplay.textContent;
+    mainDisplay.textContent = operate(currOperation, firstOperand, secondOperand);
+    secondDisplay.textContent = `${firstOperand} ${currOperation} ${secondOperand} =`
+    currOperation = null;
 }
-
 
 // * CLEAR BUTTON
 function clear() {
-    display.textContent = '';
+    mainDisplay.textContent = '';
+    secondDisplay.textContent = '';
+    firstOperand = '';
+    secondOperand = '';
+    currOperation = null;
 }
 
 
-// * DISPLAY FUNCTIONS
-function updateDisplayNumber(e) {
-    display.textContent += e.textContent;
+// * mainDisplay FUNCTIONS
+function updatemainDisplay(e) {
+    mainDisplay.textContent += e.textContent;
 }
 
-function updateDisplayOperator(e) {
-    if (display.textContent.length != 0) {
-        display.textContent += ' ' + e.textContent + ' ';
-    } else {
-        display.textContent += e.textContent + ' ';
-    }
-}
-
-function deleteFromDisplay(e) {
-    display.textContent = display.textContent
+function deleteFrommainDisplay(e) {
+    mainDisplay.textContent = mainDisplay.textContent
                             .toString()
                             .slice(0, -1);
 }
 
 // * MAIN CODE
-let display = document.querySelector(".display");
+let firstOperand = '';
+let secondOperand = '';
+let currOperation = null;
+let mainDisplay = document.querySelector(".main-display");
+let secondDisplay = document.querySelector(".secondary-display");
 
-numberButtons = document.querySelectorAll(".nbtn");
-numberButtons.forEach(btn => btn.addEventListener('click', () => updateDisplayNumber(btn)));
+const numberButtons = document.querySelectorAll(".nbtn");
+numberButtons.forEach(btn => btn.addEventListener('click', () => updatemainDisplay(btn)));
 
-operatorButtons = document.querySelectorAll('.obtn');
-operatorButtons.forEach(btn => btn.addEventListener('click', () => updateDisplayOperator(btn)));
+const operatorButtons = document.querySelectorAll('.obtn');
+operatorButtons.forEach(btn => btn.addEventListener('click', () => setOperation(btn.textContent)));
 
-equalButton = document.querySelector('.ebtn');
-equalButton.addEventListener('click', () => operate());
+const equalButton = document.querySelector('.ebtn');
+equalButton.addEventListener('click', () => evaluate());
 
-clearButton = document.querySelector(".cbtn1");
+const clearButton = document.querySelector(".cbtn1");
 clearButton.addEventListener('click', clear);
 
-deleteButton = document.querySelector(".cbtn2");
-deleteButton.addEventListener('click', deleteFromDisplay);
+const deleteButton = document.querySelector(".cbtn2");
+deleteButton.addEventListener('click', deleteFrommainDisplay);
